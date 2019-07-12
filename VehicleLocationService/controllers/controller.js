@@ -91,7 +91,8 @@ exports.locate_all_trucks = function (req, res) {
 };
 
 exports.get_truck_by_id = function (req, res) {
-
+    console.log(req.params.id);
+    res.json(trucks[parseInt(req.params.id) - 1]);
 };
 
 exports.initialze_truck_locations = function (req, res) {
