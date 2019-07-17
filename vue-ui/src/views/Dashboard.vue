@@ -54,16 +54,16 @@
             </v-layout>
             <v-flex
               d-flex
-              v-for="truck in localTrucks"
-              :key="truck.truckId"
-              :class="nearestVehicleClass(truck.truckId)"
+              v-for="Vehicle in localVehicles"
+              :key="Vehicle.VehicleId"
+              :class="nearestVehicleClass(Vehicle.VehicleId)"
             >
               <v-layout row wrap>
                 <v-flex d-flex xs1>
                   <v-icon small left>local_shipping</v-icon>
                 </v-flex>
-                <v-flex d-flex xs3>{{ truck.driver }}</v-flex>
-                <v-flex d-flex xs2>{{ truck.lat }} : {{ truck.lng }}</v-flex>
+                <v-flex d-flex xs3>{{ Vehicle.driver }}</v-flex>
+                <v-flex d-flex xs2>{{ Vehicle.lat }} : {{ Vehicle.lng }}</v-flex>
               </v-layout>
             </v-flex>
           </v-card>
@@ -85,9 +85,9 @@
 
 <script>
 import { getAccounts } from "@/services";
-import { getLocalTrucks } from "@/services";
+import { getLocalVehicles } from "@/services";
 import { getNearestVehicle } from "@/services";
-import { locateTruck } from "@/services";
+import { locateVehicle } from "@/services";
 
 export default {
   data() {
@@ -105,7 +105,7 @@ export default {
         { type: "Wonky Electrical" },
         { type: "Busted HVAC" }
       ],
-      localTrucks: [],
+      localVehicles: [],
       nearestVehicleId: "",
       nearestDriver: ""
     };
@@ -113,22 +113,22 @@ export default {
   methods: {
     submitIncident() {
       // console.log(this.accountCity, this.selectedIncident);
-      getLocalTrucks(this.accounts[this.accountIndex].BillingAddress.city).then(
+      getLocalVehicles(this.accounts[this.accountIndex].BillingAddress.city).then(
         response => {
-          this.localTrucks = response;
+          this.localVehicles = response;
           // Find nearest vehicle
-          getNearestVehicle(this.localTrucks).then(response => {
+          getNearestVehicle(this.localVehicles).then(response => {
             this.nearestVehicleId = response;
             // Get details for closest vehicle
             console.log("NearestVehicle: " + this.nearestVehicleId);
-            locateTruck(this.nearestVehicleId).then(response => {
+            locateVehicle(this.nearestVehicleId).then(response => {
               this.nearestDriver = response.driver;
               console.log("Generating ticket - Assigned to: " + this.nearestDriver + " for " + this.selectedIncident + " at " + this.accounts[this.accountIndex].Name)
               console.log(response.driver);
             });
           });
 
-          // console.log("Ticket assigned to " + this.localTrucks[this.nearestVehicleId].driver + " for " + this.selectedIncident + " at " + this.accounts[this.accountIndex].Name);
+          // console.log("Ticket assigned to " + this.localVehicles[this.nearestVehicleId].driver + " for " + this.selectedIncident + " at " + this.accounts[this.accountIndex].Name);
         }
       );
     },

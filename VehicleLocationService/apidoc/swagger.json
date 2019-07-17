@@ -1,0 +1,80 @@
+{
+  "x-enabled": {
+    "enabled": true
+  },
+  "swagger": "2.0",
+  "info": {
+    "description": "Acme Vehicle Location Services",
+    "version": "1.0.0",
+    "title": "Acme Vehicle Location API"
+  },
+  "paths": {
+    "/locateVehicles": {
+      "get": {
+        "description": "Locate all vehicles in given city",
+        "operationId": "LocateVehicles",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "city",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "vehicles",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "summary": "Locate Vehicles"
+      }
+    },
+    "/locateVehicle": {
+      "get": {
+        "description": "Locate one vehicle by vehicleId",
+        "operationId": "LocateVehicle",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "vehicleId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "vehicle",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "summary": "Locate Vehicle"
+      }
+    }
+  },
+  "schemes": [
+    "http"
+  ]
+}

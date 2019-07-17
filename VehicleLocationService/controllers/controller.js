@@ -1,101 +1,100 @@
 'use strict';
 
-var trucks = [
+var Vehicles = [
     // Denver [0-3]
-    { "truckId": "1", "driver": "James Smith", "lat": 0, "lng": 0 },
-    { "truckId": "2", "driver": "Bill Wilson", "lat": 0, "lng": 0 },
-    { "truckId": "3", "driver": "Barbara Austin", "lat": 0, "lng": 0 },
-    { "truckId": "4", "driver": "Tony Duckworth", "lat": 0, "lng": 0 },
+    { "VehicleId": "1", "driver": "James Smith", "lat": 0, "lng": 0 },
+    { "VehicleId": "2", "driver": "Bill Wilson", "lat": 0, "lng": 0 },
+    { "VehicleId": "3", "driver": "Barbara Austin", "lat": 0, "lng": 0 },
+    { "VehicleId": "4", "driver": "Tony Duckworth", "lat": 0, "lng": 0 },
     // Pittsburgh [4-7]
-    { "truckId": "5", "driver": "Michael Dawson", "lat": 0, "lng": 0 },
-    { "truckId": "6", "driver": "Annie Dylan", "lat": 0, "lng": 0 },
-    { "truckId": "7", "driver": "George Lang", "lat": 0, "lng": 0 },
-    { "truckId": "8", "driver": "Amy Lawson", "lat": 0, "lng": 0 },
+    { "VehicleId": "5", "driver": "Michael Dawson", "lat": 0, "lng": 0 },
+    { "VehicleId": "6", "driver": "Annie Dylan", "lat": 0, "lng": 0 },
+    { "VehicleId": "7", "driver": "George Lang", "lat": 0, "lng": 0 },
+    { "VehicleId": "8", "driver": "Amy Lawson", "lat": 0, "lng": 0 },
     // Omaha [8-11]
-    { "truckId": "9", "driver": "Michael Jones", "lat": 0, "lng": 0 },
-    { "truckId": "10", "driver": "Bobby King", "lat": 0, "lng": 0 },
-    { "truckId": "11", "driver": "Nate Hudson", "lat": 0, "lng": 0 },
-    { "truckId": "12", "driver": "Tom Ryan", "lat": 0, "lng": 0 },
+    { "VehicleId": "9", "driver": "Michael Jones", "lat": 0, "lng": 0 },
+    { "VehicleId": "10", "driver": "Bobby King", "lat": 0, "lng": 0 },
+    { "VehicleId": "11", "driver": "Nate Hudson", "lat": 0, "lng": 0 },
+    { "VehicleId": "12", "driver": "Tom Ryan", "lat": 0, "lng": 0 },
     // Phoenix [12-15]
-    { "truckId": "13", "driver": "Matt Hall", "lat": 0, "lng": 0 },
-    { "truckId": "14", "driver": "Larry Wolf", "lat": 0, "lng": 0 },
-    { "truckId": "15", "driver": "Julie Kay", "lat": 0, "lng": 0 },
-    { "truckId": "16", "driver": "Robert Cherry", "lat": 0, "lng": 0 }
+    { "VehicleId": "13", "driver": "Matt Hall", "lat": 0, "lng": 0 },
+    { "VehicleId": "14", "driver": "Larry Wolf", "lat": 0, "lng": 0 },
+    { "VehicleId": "15", "driver": "Julie Kay", "lat": 0, "lng": 0 },
+    { "VehicleId": "16", "driver": "Robert Cherry", "lat": 0, "lng": 0 }
 ]
 
-function initiailizeTruckLocation() {
+function initiailizeVehicleLocation() {
 
     var centerDenver = { 'lat': 39.7, 'lng': -105 };
     var centerPittsburgh = { 'lat': 40.44, 'lng': -80 };
     var centerOmaha = { 'lat': 41.25, 'lng': -96 };
     var centerPhoenix = { 'lat': 33.45, 'lng': 112 };
 
-    console.log("Initializing...");
+    // console.log("Initializing...");
 
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 4; i++) {
         var latOffset = (Math.floor((Math.random() * 10) + 1) * .1) * (Math.random() < 0.5 ? -1 : 1);
         var lngOffset = (Math.floor((Math.random() * 10) + 1) * .1) * (Math.random() < 0.5 ? -1 : 1);
-        trucks[i].lat = (centerDenver.lat + latOffset).toFixed(1);
-        trucks[i].lng = (centerDenver.lng + lngOffset).toFixed(1);
+        Vehicles[i].lat = (centerDenver.lat + latOffset).toFixed(1);
+        Vehicles[i].lng = (centerDenver.lng + lngOffset).toFixed(1);
     };
-    for (var i = 5; i < 9; i++) {
+    for (var i = 4; i < 8; i++) {
         var latOffset = (Math.floor((Math.random() * 10) + 1) * .1).toPrecision(1) * (Math.random() < 0.5 ? -1 : 1);
         var lngOffset = (Math.floor((Math.random() * 10) + 1) * .1).toPrecision(1) * (Math.random() < 0.5 ? -1 : 1);
-        trucks[i].lat = (centerPittsburgh.lat + latOffset).toFixed(1);
-        trucks[i].lng = (centerPittsburgh.lng + lngOffset).toFixed(1);
+        Vehicles[i].lat = (centerPittsburgh.lat + latOffset).toFixed(1);
+        Vehicles[i].lng = (centerPittsburgh.lng + lngOffset).toFixed(1);
     };
-    for (var i = 9; i < 13; i++) {
+    for (var i = 8; i < 12; i++) {
         var latOffset = (Math.floor((Math.random() * 10) + 1) * .1).toPrecision(1) * (Math.random() < 0.5 ? -1 : 1);
         var lngOffset = (Math.floor((Math.random() * 10) + 1) * .1).toPrecision(1) * (Math.random() < 0.5 ? -1 : 1);
-        trucks[i].lat = (centerOmaha.lat + latOffset).toFixed(1);
-        trucks[i].lng = (centerOmaha.lng + lngOffset).toFixed(1);
+        Vehicles[i].lat = (centerOmaha.lat + latOffset).toFixed(1);
+        Vehicles[i].lng = (centerOmaha.lng + lngOffset).toFixed(1);
     };
-    for (var i = 13; i < 17; i++) {
+    for (var i = 12; i < 16; i++) {
         var latOffset = (Math.floor((Math.random() * 10) + 1) * .1).toPrecision(1) * (Math.random() < 0.5 ? -1 : 1);
         var lngOffset = (Math.floor((Math.random() * 10) + 1) * .1).toPrecision(1) * (Math.random() < 0.5 ? -1 : 1);
-        trucks[i].lat = (centerPhoenix.lat + latOffset).toFixed(1);
-        trucks[i].lng = (centerPhoenix.lng + lngOffset).toFixed(1);
+        Vehicles[i].lat = (centerPhoenix.lat + latOffset).toFixed(1);
+        Vehicles[i].lng = (centerPhoenix.lng + lngOffset).toFixed(1);
     };
 }
 
-exports.locate_all_trucks = function (req, res) {
+exports.locate_all_vehicles = function (req, res) {
 
-    var localTrucks = [];
+    var localVehicles = [];
 
-    if (trucks[0].lat != 0) {
+    if (Vehicles[0].lat != 0) {
 
-        console.log("Fetching Trucks for " + req.body.city);
-        console.log(req.body);
+        // console.log("Fetching Vehicles for " + req.body.city);
+        // console.log("City: " + req.query.city);
 
-        if (req.body.city == "Denver") {
+        if (req.query.city == "Denver") {
             for (var i = 0; i < 5; i++) {
-                localTrucks.push(trucks[i]);
+                localVehicles.push(Vehicles[i]);
             }
-        } else if (req.body.city == "Pittsburgh") {
+        } else if (req.query.city == "Pittsburgh") {
             for (var i = 4; i < 8; i++) {
-                localTrucks.push(trucks[i]);
+                localVehicles.push(Vehicles[i]);
             }
-        } else if (req.body.city == "Omaha") {
+        } else if (req.query.city == "Omaha") {
             for (var i = 8; i < 12; i++) {
-                localTrucks.push(trucks[i]);
+                localVehicles.push(Vehicles[i]);
             }
-        } else if (req.body.city == "Phoenix") {
+        } else if (req.query.city == "Phoenix") {
             for (var i = 12; i < 16; i++) {
-                localTrucks.push(trucks[i]);
+                localVehicles.push(Vehicles[i]);
             }
         }
     } else {
-        initiailizeTruckLocation();
+        initiailizeVehicleLocation();
     }
-    res.send(localTrucks);
+    res.send(localVehicles);
 };
 
-exports.get_truck_by_id = function (req, res) {
-    console.log(req.params.id);
-    res.json(trucks[parseInt(req.params.id) - 1]);
+exports.get_vehicle_by_id = function (req, res) {
+    res.json(Vehicles[parseInt(req.query.vehicleId) - 1]);
 };
 
-exports.initialze_truck_locations = function (req, res) {
-    initiailizeTruckLocation();
+exports.initialze_vehicle_locations = function (req, res) {
+    initiailizeVehicleLocation();
     res.send();
 };

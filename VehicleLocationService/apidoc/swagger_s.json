@@ -1,0 +1,220 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Event Management API",
+        "version": "1.0",
+        "description": "Manage Creation and Fetching of Events"
+    },
+    "host": "example.com",
+    "paths": {
+        "/createNewEvent": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/event-model"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "customerName": "exercitation",
+                                "eventType": "esse dolore sed",
+                                "eventId": "dolore"
+                            }
+                        }
+                    }
+                },
+                "operationId": "post-createEvent",
+                "summary": "Create a new event",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "$ref": "#/definitions/event-model"
+                        },
+                        "x-examples": {
+                            "application/json": {
+                                "customerName": "veniam qui Ut cupidatat reprehenderit",
+                                "eventType": "cillum",
+                                "eventId": "Excepteur l"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/getCurrentEvent": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "```\n\n```",
+                        "schema": {
+                            "$ref": "#/definitions/event-model"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "customerName": "nisi proident",
+                                "eventType": "Ut sed Lorem ea nulla",
+                                "eventId": "dolor consequat in"
+                            }
+                        }
+                    }
+                },
+                "summary": "Get current event",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "description": "Get current event",
+                "operationId": "get-currentEvent"
+            }
+        },
+        "/getVehicleInfo": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Vehicle-model"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "Vehicle": [
+                                    {
+                                        "driver": "consequat",
+                                        "lat": "mollit irure magna elit",
+                                        "lon": "Ut qui",
+                                        "selected": true
+                                    },
+                                    {
+                                        "driver": "laborum aliquip Duis ea",
+                                        "lat": "consectetur incididunt et adipisicing in",
+                                        "lon": "ut velit",
+                                        "selected": true
+                                    },
+                                    {
+                                        "driver": "reprehenderit incididunt minim in sint",
+                                        "lat": "occaecat anim ut in minim",
+                                        "lon": "Duis aute",
+                                        "selected": false
+                                    },
+                                    {
+                                        "driver": "aliquip officia nisi velit enim",
+                                        "lat": "aliqua tempor fu",
+                                        "lon": "qui exercitation adipisicing dolore elit",
+                                        "selected": false
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "summary": "Get Information of all Vehicles in a city",
+                "operationId": "get-VehicleInfo",
+                "description": "Get information for all repair Vehicles in the designated city",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "city": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "x-examples": {
+                            "application/json": {
+                                "city": "Duis laboris"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/init": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {}
+                        }
+                    }
+                },
+                "summary": "Initialize demo data",
+                "description": "Initialze demo data",
+                "operationId": "get-init"
+            }
+        }
+    },
+    "definitions": {
+        "Vehicle-model": {
+            "type": "object",
+            "title": "Vehicle Model",
+            "properties": {
+                "Vehicle": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "driver": {
+                                "type": "string"
+                            },
+                            "lat": {
+                                "type": "string"
+                            },
+                            "lon": {
+                                "type": "string"
+                            },
+                            "selected": {
+                                "type": "boolean"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "event-model": {
+            "title": "Event Model",
+            "type": "object",
+            "properties": {
+                "customerName": {
+                    "type": "string"
+                },
+                "eventType": {
+                    "type": "string"
+                },
+                "eventId": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "http"
+    ]
+}

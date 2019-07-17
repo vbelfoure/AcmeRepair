@@ -1,0 +1,51 @@
+{
+  "x-enabled": {
+    "enabled": true
+  },
+  "swagger": "2.0",
+  "info": {
+    "description": "Acme Map Services",
+    "version": "1.0.0",
+    "title": "Acme Map Service API"
+  },
+  "paths": {
+    "/nearestVehicle": {
+      "post": {
+        "description": "Use Distance Matrix to identify closest vehicle to a destination",
+        "operationId": "NearestVehicle",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "vehicles",
+            "required": true,
+            "schema": {}
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "NearestVehicleId",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "summary": "Identify Nearest Vehicles"
+      }
+    }
+  },
+  "schemes": [
+    "http"
+  ]
+}

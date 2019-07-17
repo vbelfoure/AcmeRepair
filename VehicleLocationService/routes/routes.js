@@ -3,13 +3,12 @@
 module.exports = function (app) {
     var controller = require('../controllers/controller');
 
-    app.route('/locateTrucks')
-        .get(controller.locate_all_trucks)
-        .post(controller.locate_all_trucks);
+    app.route('/locateVehicles')
+        .get(controller.locate_all_vehicles);
 
-    app.route('/locateTruck/:id')
-        .get(controller.get_truck_by_id);
+    app.route('/locateVehicle')
+        .get(controller.get_vehicle_by_id);
 
-    app.route('/initTrucks')
-        .get(controller.initialze_truck_locations);
+    app.route('/initVehicles')
+        .get(controller.initialze_vehicle_locations);
 }

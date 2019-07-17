@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acme-vehicle-location-service-deployment
+  labels:
+    app: vehicle-location
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vehicle-location
+  template:
+    metadata:
+      labels:
+        app: vehicle-location
+    spec:
+      containers:
+      - name: vehicle-location
+        image: docker-registry.demo.axway.com/other-demo/acme-vehicle-location-service
+        env:
+        - name: ACME_VEHICLE_LOCATION_URL
+          value: "http://vehicle-location:8080"
+        ports:
+        - containerPort: 3000
+      imagePullSecrets:
+      - name: regcred
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acme-map-service-deployment
+  labels:
+    app: map-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: map-service
+  template:
+    metadata:
+      labels:
+        app: map-service
+    spec:
+      containers:
+      - name: map-service
+        image: docker-registry.demo.axway.com/other-demo/acme-map-service
+        env:
+        - name: ACME_MAP_SERVICE_URL
+          value: "http://map-service:8080"
+        ports:
+        - containerPort: 3000
+      imagePullSecrets:
+      - name: regcred

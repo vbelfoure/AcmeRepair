@@ -1,6 +1,6 @@
 let axios = require('axios');
 const ACCOUNT_URL = "https://prod-e4ec6c3369cdafa50169ce18e33d00bb.apicentral.axwayamplify.com/sfdc_sandbox_connector_179239-/accounts";
-const TRUCK_SERVICE_URL = "http://localhost:3000";
+const Vehicle_SERVICE_URL = "http://localhost:3000";
 const NEAREST_VEHICLE_SERVICE_URL = "http://localhost:3001/findNearestVehicle";
 
 
@@ -9,8 +9,8 @@ export function getAccounts() {
     return axios.get(url).then(response => response.data);
 }
 
-export function getLocalTrucks(searchCity) {
-    var url = encodeURI(`${TRUCK_SERVICE_URL}/locateTrucks`);
+export function getLocalVehicles(searchCity) {
+    var url = encodeURI(`${Vehicle_SERVICE_URL}/locateVehicles`);
     return axios.post(url, {city : searchCity} ).then(response => response.data);
 }
 
@@ -19,20 +19,20 @@ export function getNearestVehicle(vehicleList) {
     return axios.post(url, {vehicles : vehicleList} ).then(response => response.data);
 }
 
-export function locateTruck(truckId) {
-    var url = encodeURI(`${TRUCK_SERVICE_URL}/locateTruck/${truckId}`);
+export function locateVehicle(VehicleId) {
+    var url = encodeURI(`${Vehicle_SERVICE_URL}/locateVehicle/${VehicleId}`);
     return axios.get(url).then(response => response.data);
 }
 
 /*
-getLocalTrucks(city) {
+getLocalVehicles(city) {
     let url = encodeURI();
     axios
         .get(url, {
             data: { city: this.accountCity }
         })
         .then(response => {
-            this.localTrucks = response.data;
+            this.localVehicles = response.data;
         });
 }
 },
