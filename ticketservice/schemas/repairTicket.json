@@ -1,0 +1,23 @@
+{
+    "type": "object",
+    "properties": {
+        "ticketId": {
+            "type": "string"
+        },
+        "driver": {
+            "type": "string"
+        },
+        "account": {
+            "type": "string"
+        },
+        "status": {
+            "type": "string"
+        },
+        "createdOn": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "error"
+    ]
+}

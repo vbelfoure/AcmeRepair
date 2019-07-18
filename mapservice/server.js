@@ -18,6 +18,7 @@ routes(app);
 app.listen(port);
 app.use('/apidoc', express.static('apidoc'));
 
+console.log('dbuser: ' + process.env.MONGO_USER);
 console.log('todo list RESTful API server started on: ' + port);
 
 

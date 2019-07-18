@@ -1,0 +1,934 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "ticketservice",
+        "description": "Acme Repair Ticket Service",
+        "version": "1.0.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api",
+    "paths": {
+        "/ticket": {
+            "post": {
+                "responses": {
+                    "201": {
+                        "description": "The create succeeded.",
+                        "headers": {
+                            "Location": {
+                                "description": "The URL to the newly created instance.",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Create a ticket",
+                "operationId": "createTicket",
+                "consumes": [
+                    "application/json",
+                    "application/x-www-form-urlencoded",
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "Create",
+                        "in": "body",
+                        "description": "Create body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "driver",
+                                "account",
+                                "created",
+                                "status"
+                            ],
+                            "properties": {
+                                "driver": {
+                                    "type": "string",
+                                    "description": "Driver assigned to repair ticket"
+                                },
+                                "account": {
+                                    "type": "string",
+                                    "description": "Account submitting repair ticket"
+                                },
+                                "created": {
+                                    "type": "string",
+                                    "description": "Repair ticket creation date"
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "description": "Ticket status open/closed"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "ticket"
+                ]
+            },
+            "delete": {
+                "responses": {
+                    "204": {
+                        "description": "The delete succeeded."
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Deletes all tickets",
+                "operationId": "deleteTicket",
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "ticket"
+                ]
+            },
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "The find all succeeded, and the results are available.",
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "success",
+                                "request-id",
+                                "key"
+                            ],
+                            "additionalProperties": false,
+                            "properties": {
+                                "code": {
+                                    "type": "integer",
+                                    "format": "int32"
+                                },
+                                "success": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "request-id": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "key": {
+                                    "type": "string",
+                                    "enum": [
+                                        "tickets"
+                                    ]
+                                },
+                                "tickets": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/ticket-full"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Find all tickets",
+                "operationId": "findTicket",
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "ticket"
+                ]
+            }
+        },
+        "/ticket/count": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "The count succeeded, and the results are available.",
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "success",
+                                "request-id",
+                                "key"
+                            ],
+                            "additionalProperties": false,
+                            "properties": {
+                                "code": {
+                                    "type": "integer",
+                                    "format": "int32"
+                                },
+                                "success": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "request-id": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "key": {
+                                    "type": "string",
+                                    "enum": [
+                                        "ticket"
+                                    ]
+                                },
+                                "ticket": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Count tickets",
+                "operationId": "findTicketCount",
+                "parameters": [
+                    {
+                        "name": "where",
+                        "in": "query",
+                        "description": "Constrains values for fields. The value should be encoded JSON.",
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "ticket"
+                ]
+            }
+        },
+        "/ticket/query": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "The query succeeded, and the results are available.",
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "success",
+                                "request-id",
+                                "key"
+                            ],
+                            "additionalProperties": false,
+                            "properties": {
+                                "code": {
+                                    "type": "integer",
+                                    "format": "int32"
+                                },
+                                "success": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "request-id": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "key": {
+                                    "type": "string",
+                                    "enum": [
+                                        "tickets"
+                                    ]
+                                },
+                                "tickets": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/ticket-full"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Query tickets",
+                "operationId": "findTicketQuery",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "The number of records to fetch. The value must be greater than 0, and no greater than 1000.",
+                        "type": "number"
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "description": "The number of records to skip. The value must not be less than 0.",
+                        "type": "number"
+                    },
+                    {
+                        "name": "where",
+                        "in": "query",
+                        "description": "Constrains values for fields. The value should be encoded JSON.",
+                        "type": "string"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "A dictionary of one or more fields specifying sorting of results. In general, you can sort based on any predefined field that you can query using the where operator, as well as on custom fields. The value should be encoded JSON.",
+                        "type": "string"
+                    },
+                    {
+                        "name": "sel",
+                        "in": "query",
+                        "description": "Selects which fields to return from the query. Others are excluded. The value should be encoded JSON.",
+                        "type": "string"
+                    },
+                    {
+                        "name": "unsel",
+                        "in": "query",
+                        "description": "Selects which fields to not return from the query. Others are included. The value should be encoded JSON.",
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "ticket"
+                ]
+            }
+        },
+        "/ticket/{id}": {
+            "put": {
+                "responses": {
+                    "204": {
+                        "description": "The update succeeded."
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Update a specific ticket",
+                "operationId": "updateTicketByID",
+                "consumes": [
+                    "application/json",
+                    "application/x-www-form-urlencoded",
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ticket ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "Update",
+                        "in": "body",
+                        "description": "Update body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "driver": {
+                                    "type": "string",
+                                    "description": "Driver assigned to repair ticket"
+                                },
+                                "account": {
+                                    "type": "string",
+                                    "description": "Account submitting repair ticket"
+                                },
+                                "created": {
+                                    "type": "string",
+                                    "description": "Repair ticket creation date"
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "description": "Ticket status open/closed"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "ticket"
+                ]
+            },
+            "delete": {
+                "responses": {
+                    "204": {
+                        "description": "The delete succeeded."
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Delete a specific ticket",
+                "operationId": "deleteTicketByID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ticket ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "ticket"
+                ]
+            },
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "The find succeeded, and the results are available.",
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "success",
+                                "request-id",
+                                "key"
+                            ],
+                            "additionalProperties": false,
+                            "properties": {
+                                "code": {
+                                    "type": "integer",
+                                    "format": "int32"
+                                },
+                                "success": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "request-id": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "key": {
+                                    "type": "string",
+                                    "enum": [
+                                        "ticket"
+                                    ]
+                                },
+                                "ticket": {
+                                    "$ref": "#/definitions/ticket-full"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Find one ticket by ID",
+                "operationId": "findTicketByID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ticket ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "ticket"
+                ]
+            }
+        },
+        "/ticket/distinct/{field}": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Distinct fields response.",
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "success",
+                                "request-id",
+                                "key"
+                            ],
+                            "additionalProperties": false,
+                            "properties": {
+                                "code": {
+                                    "type": "integer",
+                                    "format": "int32"
+                                },
+                                "success": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "request-id": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "key": {
+                                    "type": "string",
+                                    "enum": [
+                                        "tickets"
+                                    ]
+                                },
+                                "tickets": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "uniqueItems": true
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Find distinct tickets",
+                "operationId": "findTicketDistinctByFIELD",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "The number of records to fetch. The value must be greater than 0, and no greater than 1000.",
+                        "type": "number"
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "description": "The number of records to skip. The value must not be less than 0.",
+                        "type": "number"
+                    },
+                    {
+                        "name": "where",
+                        "in": "query",
+                        "description": "Constrains values for fields. The value should be encoded JSON.",
+                        "type": "string"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "A dictionary of one or more fields specifying sorting of results. In general, you can sort based on any predefined field that you can query using the where operator, as well as on custom fields. The value should be encoded JSON.",
+                        "type": "string"
+                    },
+                    {
+                        "name": "field",
+                        "in": "path",
+                        "description": "The field name that must be distinct.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "ticket"
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "ResponseModel": {
+            "type": "object",
+            "required": [
+                "success",
+                "request-id"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "success": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "request-id": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "ErrorModel": {
+            "type": "object",
+            "required": [
+                "message",
+                "code",
+                "success",
+                "request-id"
+            ],
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "success": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "request-id": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "ticket-full": {
+            "type": "object",
+            "properties": {
+                "driver": {
+                    "description": "Driver assigned to repair ticket",
+                    "type": "string"
+                },
+                "account": {
+                    "description": "Account submitting repair ticket",
+                    "type": "string"
+                },
+                "created": {
+                    "description": "Repair ticket creation date",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Ticket status open/closed",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "driver",
+                "account",
+                "created",
+                "status",
+                "id"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "schemes": [
+        "http"
+    ]
+}

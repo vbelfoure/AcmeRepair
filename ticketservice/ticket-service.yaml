@@ -2,10 +2,10 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: vehicle-location
+    app: ticket-service
     apic-managed: "true"
   creationTimestamp: null
-  name: vehicle-location
+  name: ticket-service
   namespace: apic-demo
 spec:
   ports:
@@ -14,7 +14,7 @@ spec:
     targetPort: http
     name: http
   selector:
-    run: vehicle-location
+    run: ticket-service
 status:
   loadBalancer: {}
 ---
@@ -23,28 +23,31 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    run: vehicle-location
-  name: vehicle-location
+    run: ticket-service
+  name: ticket-service
   namespace: apic-demo
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: vehicle-location
+      run: ticket-service
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: vehicle-location
-        run: vehicle-location
+        app: ticket-service
+        run: ticket-service
     spec:
       containers:
-      - image: vbelfoure/acme-vehicle-location-service
+      - image: vbelfoure/acme-ticket-service
         imagePullPolicy: Always
-        name: vehicle-location
+        name: ticket-service
         ports:
         - containerPort: 8080
           name: http
         resources: {}
+        envFrom:
+          - secretRef:
+            name: mongosecret
 status: {}
