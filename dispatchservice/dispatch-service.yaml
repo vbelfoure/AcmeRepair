@@ -2,10 +2,10 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: ticket-service
+    app: dispatch-service
     apic-managed: "true"
   creationTimestamp: null
-  name: ticket-service
+  name: dispatch-service
   namespace: apic-demo
 spec:
   ports:
@@ -14,7 +14,7 @@ spec:
     targetPort: http
     name: http
   selector:
-    run: ticket-service
+    run: dispatch-service
 status:
   loadBalancer: {}
 ---
@@ -23,26 +23,26 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    run: ticket-service
-  name: ticket-service
+    run: dispatch-service
+  name: dispatch-service
   namespace: apic-demo
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: ticket-service
+      run: dispatch-service
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: ticket-service
-        run: ticket-service
+        app: dispatch-service
+        run: dispatch-service
     spec:
       containers:
-      - image: vbelfoure/acme-ticket-service
+      - image: vbelfoure/acme-dispatch-service
         imagePullPolicy: Always
-        name: ticket-service
+        name: dispatch-service
         ports:
         - containerPort: 8080
           name: http

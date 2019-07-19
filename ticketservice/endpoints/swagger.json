@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "title": "ticketservice",
-        "description": "Acme Repair Ticket Service",
+        "description": "An API Builder service",
         "version": "1.0.0"
     },
     "host": "localhost:8080",
@@ -70,7 +70,9 @@
                                 "driver",
                                 "account",
                                 "created",
-                                "status"
+                                "status",
+                                "incident",
+                                "ticketId"
                             ],
                             "properties": {
                                 "driver": {
@@ -88,6 +90,14 @@
                                 "status": {
                                     "type": "string",
                                     "description": "Ticket status open/closed"
+                                },
+                                "incident": {
+                                    "type": "string",
+                                    "description": "Reported Incident"
+                                },
+                                "ticketId": {
+                                    "type": "string",
+                                    "description": "Ticket Id"
                                 }
                             }
                         }
@@ -543,6 +553,14 @@
                                 "status": {
                                     "type": "string",
                                     "description": "Ticket status open/closed"
+                                },
+                                "incident": {
+                                    "type": "string",
+                                    "description": "Reported Incident"
+                                },
+                                "ticketId": {
+                                    "type": "string",
+                                    "description": "Ticket Id"
                                 }
                             }
                         }
@@ -914,6 +932,14 @@
                     "description": "Ticket status open/closed",
                     "type": "string"
                 },
+                "incident": {
+                    "description": "Reported Incident",
+                    "type": "string"
+                },
+                "ticketId": {
+                    "description": "Ticket Id",
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 }
@@ -923,6 +949,8 @@
                 "account",
                 "created",
                 "status",
+                "incident",
+                "ticketId",
                 "id"
             ],
             "additionalProperties": false

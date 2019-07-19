@@ -1,0 +1,927 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "dispatchservice",
+        "description": "Acme Vehicle Dispatch API",
+        "version": "1.0.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api",
+    "paths": {
+        "/dispatch": {
+            "post": {
+                "responses": {
+                    "201": {
+                        "description": "The create succeeded.",
+                        "headers": {
+                            "Location": {
+                                "description": "The URL to the newly created instance.",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Create a dispatch",
+                "operationId": "createDispatch",
+                "consumes": [
+                    "application/json",
+                    "application/x-www-form-urlencoded",
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "Create",
+                        "in": "body",
+                        "description": "Create body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "ticketId",
+                                "assignedVehicle",
+                                "vehicles"
+                            ],
+                            "properties": {
+                                "ticketId": {
+                                    "type": "string",
+                                    "description": "Ticket Id"
+                                },
+                                "assignedVehicle": {
+                                    "type": "string",
+                                    "description": "Vehicle assigned to ticket"
+                                },
+                                "vehicles": {
+                                    "type": "array",
+                                    "description": "Array of vehicles in vicinity",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "dispatch"
+                ]
+            },
+            "delete": {
+                "responses": {
+                    "204": {
+                        "description": "The delete succeeded."
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Deletes all dispatches",
+                "operationId": "deleteDispatch",
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "dispatch"
+                ]
+            },
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "The find all succeeded, and the results are available.",
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "success",
+                                "request-id",
+                                "key"
+                            ],
+                            "additionalProperties": false,
+                            "properties": {
+                                "code": {
+                                    "type": "integer",
+                                    "format": "int32"
+                                },
+                                "success": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "request-id": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "key": {
+                                    "type": "string",
+                                    "enum": [
+                                        "dispatches"
+                                    ]
+                                },
+                                "dispatches": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/dispatch-full"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Find all dispatches",
+                "operationId": "findDispatch",
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "dispatch"
+                ]
+            }
+        },
+        "/dispatch/count": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "The count succeeded, and the results are available.",
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "success",
+                                "request-id",
+                                "key"
+                            ],
+                            "additionalProperties": false,
+                            "properties": {
+                                "code": {
+                                    "type": "integer",
+                                    "format": "int32"
+                                },
+                                "success": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "request-id": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "key": {
+                                    "type": "string",
+                                    "enum": [
+                                        "dispatch"
+                                    ]
+                                },
+                                "dispatch": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Count dispatches",
+                "operationId": "findDispatchCount",
+                "parameters": [
+                    {
+                        "name": "where",
+                        "in": "query",
+                        "description": "Constrains values for fields. The value should be encoded JSON.",
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "dispatch"
+                ]
+            }
+        },
+        "/dispatch/query": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "The query succeeded, and the results are available.",
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "success",
+                                "request-id",
+                                "key"
+                            ],
+                            "additionalProperties": false,
+                            "properties": {
+                                "code": {
+                                    "type": "integer",
+                                    "format": "int32"
+                                },
+                                "success": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "request-id": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "key": {
+                                    "type": "string",
+                                    "enum": [
+                                        "dispatches"
+                                    ]
+                                },
+                                "dispatches": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/dispatch-full"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Query dispatches",
+                "operationId": "findDispatchQuery",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "The number of records to fetch. The value must be greater than 0, and no greater than 1000.",
+                        "type": "number"
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "description": "The number of records to skip. The value must not be less than 0.",
+                        "type": "number"
+                    },
+                    {
+                        "name": "where",
+                        "in": "query",
+                        "description": "Constrains values for fields. The value should be encoded JSON.",
+                        "type": "string"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "A dictionary of one or more fields specifying sorting of results. In general, you can sort based on any predefined field that you can query using the where operator, as well as on custom fields. The value should be encoded JSON.",
+                        "type": "string"
+                    },
+                    {
+                        "name": "sel",
+                        "in": "query",
+                        "description": "Selects which fields to return from the query. Others are excluded. The value should be encoded JSON.",
+                        "type": "string"
+                    },
+                    {
+                        "name": "unsel",
+                        "in": "query",
+                        "description": "Selects which fields to not return from the query. Others are included. The value should be encoded JSON.",
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "dispatch"
+                ]
+            }
+        },
+        "/dispatch/{id}": {
+            "put": {
+                "responses": {
+                    "204": {
+                        "description": "The update succeeded."
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Update a specific dispatch",
+                "operationId": "updateDispatchByID",
+                "consumes": [
+                    "application/json",
+                    "application/x-www-form-urlencoded",
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The dispatch ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "Update",
+                        "in": "body",
+                        "description": "Update body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "ticketId": {
+                                    "type": "string",
+                                    "description": "Ticket Id"
+                                },
+                                "assignedVehicle": {
+                                    "type": "string",
+                                    "description": "Vehicle assigned to ticket"
+                                },
+                                "vehicles": {
+                                    "type": "array",
+                                    "description": "Array of vehicles in vicinity",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "dispatch"
+                ]
+            },
+            "delete": {
+                "responses": {
+                    "204": {
+                        "description": "The delete succeeded."
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Delete a specific dispatch",
+                "operationId": "deleteDispatchByID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The dispatch ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "dispatch"
+                ]
+            },
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "The find succeeded, and the results are available.",
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "success",
+                                "request-id",
+                                "key"
+                            ],
+                            "additionalProperties": false,
+                            "properties": {
+                                "code": {
+                                    "type": "integer",
+                                    "format": "int32"
+                                },
+                                "success": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "request-id": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "key": {
+                                    "type": "string",
+                                    "enum": [
+                                        "dispatch"
+                                    ]
+                                },
+                                "dispatch": {
+                                    "$ref": "#/definitions/dispatch-full"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Find one dispatch by ID",
+                "operationId": "findDispatchByID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The dispatch ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "dispatch"
+                ]
+            }
+        },
+        "/dispatch/distinct/{field}": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Distinct fields response.",
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "success",
+                                "request-id",
+                                "key"
+                            ],
+                            "additionalProperties": false,
+                            "properties": {
+                                "code": {
+                                    "type": "integer",
+                                    "format": "int32"
+                                },
+                                "success": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "request-id": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "key": {
+                                    "type": "string",
+                                    "enum": [
+                                        "dispatches"
+                                    ]
+                                },
+                                "dispatches": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "uniqueItems": true
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "This request requires user authentication, as configured by the server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "No results were found.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong during the request; check out the logs on your server.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "504": {
+                        "description": "The request took too long to process, and the server timed it out.",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "default": {
+                        "description": "Response from Server",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                },
+                "description": "Find distinct dispatches",
+                "operationId": "findDispatchDistinctByFIELD",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "The number of records to fetch. The value must be greater than 0, and no greater than 1000.",
+                        "type": "number"
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "description": "The number of records to skip. The value must not be less than 0.",
+                        "type": "number"
+                    },
+                    {
+                        "name": "where",
+                        "in": "query",
+                        "description": "Constrains values for fields. The value should be encoded JSON.",
+                        "type": "string"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "A dictionary of one or more fields specifying sorting of results. In general, you can sort based on any predefined field that you can query using the where operator, as well as on custom fields. The value should be encoded JSON.",
+                        "type": "string"
+                    },
+                    {
+                        "name": "field",
+                        "in": "path",
+                        "description": "The field name that must be distinct.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml",
+                    "text/yaml",
+                    "text/csv",
+                    "text/plain"
+                ],
+                "tags": [
+                    "dispatch"
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "ResponseModel": {
+            "type": "object",
+            "required": [
+                "success",
+                "request-id"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "success": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "request-id": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "ErrorModel": {
+            "type": "object",
+            "required": [
+                "message",
+                "code",
+                "success",
+                "request-id"
+            ],
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "success": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "request-id": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "dispatch-full": {
+            "type": "object",
+            "properties": {
+                "ticketId": {
+                    "description": "Ticket Id",
+                    "type": "string"
+                },
+                "assignedVehicle": {
+                    "description": "Vehicle assigned to ticket",
+                    "type": "string"
+                },
+                "vehicles": {
+                    "description": "Array of vehicles in vicinity",
+                    "type": "array",
+                    "items": {}
+                },
+                "id": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "ticketId",
+                "assignedVehicle",
+                "vehicles",
+                "id"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "schemes": [
+        "http"
+    ]
+}

@@ -12,13 +12,23 @@ var Model = APIBuilder.createModel('ticket', {
             "required": true
         },
         "created": {
-            "type": "date",
+            "type": "string",
             "description": "Repair ticket creation date",
             "required": true
         },
         "status": {
             "type": "string",
             "description": "Ticket status open/closed",
+            "required": true
+        },
+        "incident": {
+            "type": "string",
+            "description": "Reported Incident",
+            "required": true
+        },
+        "ticketId": {
+            "type": "string",
+            "description": "Ticket Id",
             "required": true
         }
     },
