@@ -30,8 +30,6 @@ function initiailizeVehicleLocation() {
     var centerOmaha = { 'lat': 41.25, 'lng': -96 };
     var centerPhoenix = { 'lat': 33.45, 'lng': 112 };
 
-    // console.log("Initializing...");
-
     for (var i = 0; i < 4; i++) {
         var latOffset = (Math.floor((Math.random() * 10) + 1) * .1) * (Math.random() < 0.5 ? -1 : 1);
         var lngOffset = (Math.floor((Math.random() * 10) + 1) * .1) * (Math.random() < 0.5 ? -1 : 1);
@@ -64,11 +62,8 @@ exports.locate_all_vehicles = function (req, res) {
 
     if (Vehicles[0].lat != 0) {
 
-        // console.log("Fetching Vehicles for " + req.body.city);
-        // console.log("City: " + req.query.city);
-
         if (req.query.city == "Denver") {
-            for (var i = 0; i < 5; i++) {
+            for (var i = 0; i < 4; i++) {
                 localVehicles.push(Vehicles[i]);
             }
         } else if (req.query.city == "Pittsburgh") {

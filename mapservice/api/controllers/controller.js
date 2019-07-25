@@ -6,6 +6,7 @@ exports.find_nearest = function (req,res) {
 
     // return a random Vehicle ID
 
-    var x = Math.floor(Math.random() * req.body.vehicles.length);
-    res.send(req.body.vehicles[x].VehicleId);
+    var nearest = Math.floor(Math.random() * (req.body.vehicles.length - 1));
+    // res.send(req.body.vehicles[nearest].VehicleId);
+    res.send(nearest.toString());
 };

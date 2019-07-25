@@ -4,9 +4,37 @@
       <v-layout row>
         <h1 class="subheading grey--text">Dashboard</h1>
         <v-spacer></v-spacer>
-        <v-btn small flat color="grey" @click="resetDemo()">
+      </v-layout>
+    </v-container>
+    <v-container>
+      <v-layout>
+        <div v-if="!ticketStreamConnected">
+          <v-btn small flat color="green" @click="connectTicketStream()">
+            <v-icon>layers</v-icon>
+            <span>Connect Ticket Stream</span>
+          </v-btn>
+        </div>
+        <div v-if="ticketStreamConnected">
+          <v-btn small flat color="red" @click="disconnectTicketStream()">
+            <v-icon>layers_clear</v-icon>
+            <span>Disconnect Ticket Stream</span>
+          </v-btn>
+        </div>
+        <div v-if="!dispatchStreamConnected">
+          <v-btn small flat color="green" @click="connectDispatchStream()">
+            <v-icon>layers</v-icon>
+            <span>Connect Dispatch Stream</span>
+          </v-btn>
+        </div>
+        <div v-if="dispatchStreamConnected">
+          <v-btn small flat color="red" @click="disconnectDispatchStream()">
+            <v-icon>layers_clear</v-icon>
+            <span>Disconnect Dispatch Stream</span>
+          </v-btn>
+        </div>
+        <v-btn small flat color="grey" @click="resetDemoData()">
           <v-icon>cached</v-icon>
-          <span>Reset</span>
+          <span>Reset Demo Data</span>
         </v-btn>
       </v-layout>
     </v-container>
@@ -42,9 +70,11 @@
           <v-btn flat class="success mx-2 mt-3" @click="submitIncident">Submit Incident</v-btn>
         </v-form>
       </v-card>
-
+    </v-container>
+    <v-container fluid grid-list-md>
       <v-layout row wrap>
-        <v-flex d-flex xs6>
+        <!-- Vehicles view -->
+        <v-flex d-flex xs4>
           <v-card flat>
             <v-card-title>Vehicles</v-card-title>
             <v-layout>
@@ -62,18 +92,35 @@
                 <v-flex d-flex xs1>
                   <v-icon small left>local_shipping</v-icon>
                 </v-flex>
-                <v-flex d-flex xs3>{{ Vehicle.driver }}</v-flex>
+                <v-flex d-flex xs2>{{ Vehicle.driver }}</v-flex>
                 <v-flex d-flex xs2>{{ Vehicle.lat }} : {{ Vehicle.lng }}</v-flex>
               </v-layout>
             </v-flex>
           </v-card>
         </v-flex>
-        <v-flex xs6>
+        <!-- Tickets view -->
+        <v-flex xs8>
           <v-card flat>
             <v-card-title>Tickets</v-card-title>
-            <v-flex>
+            <v-layout>
+              <v-flex xs1></v-flex>
+              <v-flex xs2 grey--text>Ticket ID</v-flex>
+              <v-flex xs2 grey--text>Driver</v-flex>
+              <v-flex xs2 grey--text>Account</v-flex>
+              <v-flex xs2 grey--text>Incident</v-flex>
+              <v-flex xs2 grey--text>Created</v-flex>
+            </v-layout>
+            <v-flex d-flex v-for="ticket in ticketData.tickets" :key="ticket.ticketId">
               <v-layout row wrap>
-                <v-flex>Ticket 34256 assigned to</v-flex>
+                <v-flex d-flex xs1>
+                  <v-icon v-if="ticket.status == 'open' " small left color=green>local_offer</v-icon>
+                  <v-icon v-else small left>local_offer</v-icon>
+                </v-flex>
+                <v-flex d-flex xs2>{{ ticket.ticketId }}</v-flex>
+                <v-flex d-flex xs2>{{ ticket.driver }}</v-flex>
+                <v-flex d-flex xs2>{{ ticket.account }}</v-flex>
+                <v-flex d-flex xs2>{{ ticket.incident }}</v-flex>
+                <v-flex d-flex xs2>{{ ticket.created }}</v-flex>
               </v-layout>
             </v-flex>
           </v-card>
@@ -85,9 +132,11 @@
 
 <script>
 import { getAccounts } from "@/services";
-import { getLocalVehicles } from "@/services";
-import { getNearestVehicle } from "@/services";
-import { locateVehicle } from "@/services";
+import { repairTicketFlow } from "@/services";
+import { StreamDataIo } from "streamdataio-js-sdk";
+import * as jsonpatch from "fast-json-patch";
+import { streamControl } from "@/services";
+import { resetDemo } from "@/services";
 
 export default {
   data() {
@@ -107,43 +156,108 @@ export default {
       ],
       localVehicles: [],
       nearestVehicleId: "",
-      nearestDriver: ""
+      nearestDriver: "",
+      currentIncident: "",
+      ticketStreamConnected: false,
+      streamToken: process.env.VUE_APP_STREAMTOKEN,
+      ticketStreamUrl: process.env.VUE_APP_REPAIR_TICKET_STREAM_URL,
+      ticketStreamData: null,
+      ticketData: [],
+      streamsConnected: false,
+      dispatchStreamUrl: process.env.VUE_APP_DISPATCH_STREAM_URL,
+      dispatchStreamData: null,
+      dispatchData: [],
+      dispatchStreamConnected: false
     };
   },
   methods: {
     submitIncident() {
-      // console.log(this.accountCity, this.selectedIncident);
-      getLocalVehicles(this.accounts[this.accountIndex].BillingAddress.city).then(
-        response => {
-          this.localVehicles = response;
-          // Find nearest vehicle
-          getNearestVehicle(this.localVehicles).then(response => {
-            this.nearestVehicleId = response;
-            // Get details for closest vehicle
-            console.log("NearestVehicle: " + this.nearestVehicleId);
-            locateVehicle(this.nearestVehicleId).then(response => {
-              this.nearestDriver = response.driver;
-              console.log("Generating ticket - Assigned to: " + this.nearestDriver + " for " + this.selectedIncident + " at " + this.accounts[this.accountIndex].Name)
-              console.log(response.driver);
-            });
-          });
-
-          // console.log("Ticket assigned to " + this.localVehicles[this.nearestVehicleId].driver + " for " + this.selectedIncident + " at " + this.accounts[this.accountIndex].Name);
-        }
-      );
-    },
-    resetDemo() {
-      getAccounts().then(response => {
-        this.accounts = response;
-        this.loading = false;
+      repairTicketFlow(
+        this.accounts[this.accountIndex].BillingAddress.city,
+        this.accounts[this.accountIndex].Name,
+        this.selectedIncident
+      ).then(response => {
+        this.currentIncident = response.id;
       });
+    },
+    resetDemoData() {
+      resetDemo();
+    },
+    connectDispatchStream: function() {
+      // Open Dispatch stream
+      this.dispatchStreamData = StreamDataIo.createEventSource(
+        "https://phx-90.demo.axway.com:8080/vehicleDispatch/dispatch",
+        process.env.VUE_APP_STREAMTOKEN,
+        []
+      );
+      this.dispatchStreamData
+        .onData(data => {
+          this.dispatchData = data;
+        }, this)
+        .onPatch(patch => {
+          jsonpatch.applyPatch(this.dispatchData, patch);
+        }, this)
+        .onError(error => {
+          this.dispatchStreamData.close();
+          this.dispatchStreamConencted = false;
+          console.log(error);
+        }, this)
+        .onOpen(function() {
+          this.dispatchStreamConnected = true;
+          console.log("Dispatch stream open");
+        }, this);
+      this.dispatchStreamData.open();
+    },
+    connectTicketStream: function() {
+      // Open ticket stream
+      this.ticketStreamData = StreamDataIo.createEventSource(
+        "https://phx-90.demo.axway.com:8080/ticket/ticket",
+        process.env.VUE_APP_STREAMTOKEN,
+        []
+      );
+      this.ticketStreamData
+        .onData(data => {
+          this.ticketData = data;
+        }, this)
+        .onPatch(patch => {
+          jsonpatch.applyPatch(this.ticketData, patch);
+        }, this)
+        .onError(error => {
+          this.ticketStreamData.close();
+          this.ticketStreamConnected = false;
+          console.log(error);
+        }, this)
+        .onOpen(function() {
+          this.ticketStreamConnected = true;
+          console.log("Ticket stream open");
+        }, this);
+      this.ticketStreamData.open();
+    },
+    disconnectDispatchStream: function() {
+      // Close Dispatch stream
+      if (this.dispatchStreamData) {
+        this.dispatchStreamData.close();
+        this.dispatchStreamConnected = false;
+      }
+    },
+    disconnectTicketStream: function() {
+      if (this.ticketStreamData) {
+        this.ticketStreamData.close();
+        this.ticketStreamConnected = false;
+      }
     },
     nearestVehicleClass(vehicleId) {
       return vehicleId == this.nearestVehicleId ? "blue--text" : "";
+    },
+    stub(value) {
+      return value;
     }
   },
   mounted() {
-    this.resetDemo();
+    getAccounts().then(response => {
+      this.accounts = response;
+      this.loading = false;
+    });
   },
   computed: {}
 };
