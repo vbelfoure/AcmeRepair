@@ -3,6 +3,7 @@ const ACCOUNT_SERVICE_URL = "https://prod-e4ec6c256a5b83d8016a795888bf0a8b.apice
 const REPAIR_TICKET_FLOW_URL = "https://prod-e4ec6c256a5b83d8016a795888bf0a8b.apicentral.axwayamplify.com/AcmeRepairIncidentResponse_sandbox_flow_395012-";
 const TICKET_SERVICE_URL = "https://phx-90.demo.axway.com:8080/ticket/ticket";
 const DISPATCH_SERVICE_URL = "https://phx-90.demo.axway.com:8080/vehicleDispatch/dispatch";
+const GOOGLE_MAP_URL="https://maps.googleapis.com/maps/api/geocode/json";
 
 export function getAccounts() {
     var url = encodeURI(`${ACCOUNT_SERVICE_URL}/accounts?where=SLA__c='Platinum'&fields=Id,Name,BillingAddress`);
@@ -20,6 +21,13 @@ export function resetDemo() {
     var dispatchServiceUrl = encodeURI(`${DISPATCH_SERVICE_URL}`);
     axios.delete(dispatchServiceUrl);
     return;
+}
+
+export function geocodeAddress(address, key) {
+    var url = encodeURI(`${GOOGLE_MAP_URL}?address=${address}&key=${key}`);
+    console.log(address);
+    return axios.get(url).then(response => response.data.results[0].geometry);
+    
 }
 
 /*

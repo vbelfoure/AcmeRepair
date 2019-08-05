@@ -77,11 +77,27 @@
         <v-flex d-flex xs4>
           <v-card flat>
             <v-card-title>Vehicles</v-card-title>
-            <v-layout>
-              <v-flex xs1></v-flex>
-              <v-flex xs3 grey--text>Driver</v-flex>
-              <v-flex xs2 grey--text>Location</v-flex>
-            </v-layout>
+
+            <div>
+              <gmap-map
+                :center="mapCenter"
+                :zoom="10"
+                :options="mapOptions"
+                style="height:250px; width: 100%;"
+              >
+                <gmap-custom-marker :marker="mapCenter">
+                  <i class="material-icons">home</i>
+                </gmap-custom-marker>
+                <gmap-custom-marker
+                  v-for="vehicle in vehicleMap.vehicles"
+                  :key="vehicle.VehicleId"
+                  :marker="vehicle.location"
+                >
+                  <i class="material-icons">local_shipping</i>
+                </gmap-custom-marker>
+              </gmap-map>
+            </div>
+            <!--
             <v-flex
               d-flex
               v-for="Vehicle in localVehicles"
@@ -96,6 +112,7 @@
                 <v-flex d-flex xs2>{{ Vehicle.lat }} : {{ Vehicle.lng }}</v-flex>
               </v-layout>
             </v-flex>
+            -->
           </v-card>
         </v-flex>
         <!-- Tickets view -->
@@ -113,7 +130,7 @@
             <v-flex d-flex v-for="ticket in ticketData.tickets" :key="ticket.ticketId">
               <v-layout row wrap>
                 <v-flex d-flex xs1>
-                  <v-icon v-if="ticket.status == 'open' " small left color=green>local_offer</v-icon>
+                  <v-icon v-if="ticket.status == 'open' " small left color="green">local_offer</v-icon>
                   <v-icon v-else small left>local_offer</v-icon>
                 </v-flex>
                 <v-flex d-flex xs2>{{ ticket.ticketId }}</v-flex>
@@ -135,8 +152,19 @@ import { getAccounts } from "@/services";
 import { repairTicketFlow } from "@/services";
 import { StreamDataIo } from "streamdataio-js-sdk";
 import * as jsonpatch from "fast-json-patch";
-import { streamControl } from "@/services";
 import { resetDemo } from "@/services";
+import { geocodeAddress } from "@/services";
+import GmapCustomMarker from "vue2-gmap-custom-marker";
+
+import * as VueGoogleMaps from "vue2-google-maps";
+import Vue from "vue";
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: process.env.VUE_APP_GOOGLE_API_KEY,
+    libraries: "places"
+  }
+});
 
 export default {
   data() {
@@ -162,12 +190,25 @@ export default {
       streamToken: process.env.VUE_APP_STREAMTOKEN,
       ticketStreamUrl: process.env.VUE_APP_REPAIR_TICKET_STREAM_URL,
       ticketStreamData: null,
+      ticketStreamMessage: "",
       ticketData: [],
       streamsConnected: false,
       dispatchStreamUrl: process.env.VUE_APP_DISPATCH_STREAM_URL,
       dispatchStreamData: null,
+      dispatchStreamMessage: "",
       dispatchData: [],
-      dispatchStreamConnected: false
+      dispatchStreamConnected: false,
+      vehicleMap: [],
+      mapCenter: { lat: 10.0, lng: 10.0 },
+      accountAddress: "",
+      mapOptions: {
+        zoomControl: false,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: false,
+        disableDefaultUi: true
+      },
+      googleApiKey: process.env.VUE_APP_GOOGLE_API_KEY
     };
   },
   methods: {
@@ -179,6 +220,21 @@ export default {
       ).then(response => {
         this.currentIncident = response.id;
       });
+      this.accountAddress =
+        this.accounts[this.accountIndex].BillingAddress.street +
+        " " +
+        this.accounts[this.accountIndex].BillingAddress.city +
+        " " +
+        this.accounts[this.accountIndex].BillingAddress.state +
+        " " +
+        this.accounts[this.accountIndex].BillingAddress.postalCode;
+      geocodeAddress(
+        this.accountAddress.replace(/ /g, "+"),
+        process.env.VUE_APP_GOOGLE_API_KEY
+      ).then(response => {
+        this.mapCenter = response.location;
+        console.log(this.mapCenter);
+      });
     },
     resetDemoData() {
       resetDemo();
@@ -186,7 +242,7 @@ export default {
     connectDispatchStream: function() {
       // Open Dispatch stream
       this.dispatchStreamData = StreamDataIo.createEventSource(
-        "https://phx-90.demo.axway.com:8080/vehicleDispatch/dispatch",
+        process.env.VUE_APP_DISPATCH_STREAM_URL,
         process.env.VUE_APP_STREAMTOKEN,
         []
       );
@@ -196,22 +252,25 @@ export default {
         }, this)
         .onPatch(patch => {
           jsonpatch.applyPatch(this.dispatchData, patch);
+          if (patch[1] != null) {
+            this.vehicleMap = patch[1].value;
+            console.log(this.vehicleMap);
+          }
         }, this)
         .onError(error => {
           this.dispatchStreamData.close();
           this.dispatchStreamConencted = false;
-          console.log(error);
+          this.dispatchStreamMessage = error;
         }, this)
         .onOpen(function() {
           this.dispatchStreamConnected = true;
-          console.log("Dispatch stream open");
         }, this);
       this.dispatchStreamData.open();
     },
     connectTicketStream: function() {
       // Open ticket stream
       this.ticketStreamData = StreamDataIo.createEventSource(
-        "https://phx-90.demo.axway.com:8080/ticket/ticket",
+        process.env.VUE_APP_REPAIR_TICKET_STREAM_URL,
         process.env.VUE_APP_STREAMTOKEN,
         []
       );
@@ -225,11 +284,10 @@ export default {
         .onError(error => {
           this.ticketStreamData.close();
           this.ticketStreamConnected = false;
-          console.log(error);
+          this.ticketStreamMessage = error;
         }, this)
         .onOpen(function() {
           this.ticketStreamConnected = true;
-          console.log("Ticket stream open");
         }, this);
       this.ticketStreamData.open();
     },
@@ -259,7 +317,10 @@ export default {
       this.loading = false;
     });
   },
-  computed: {}
+  computed: {},
+  components: {
+    "gmap-custom-marker": GmapCustomMarker
+  }
 };
 </script>
 
